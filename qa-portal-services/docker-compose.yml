@@ -21,7 +21,7 @@ services:
         - cv-api
         - feedback-api
         - form-api
-        - self-reflection-api
+        - self-reflection-api      
 
     postgres:
       image: postgres
@@ -34,10 +34,29 @@ services:
       ports:
         - "5434:5432"
 
+    mongo:
+      image: mongo
+      environment:
+      - MONGO_INITDB_DATABASE=qa-portal
+      - MONGO_INITDB_ROOT_USERNAME=mongo
+      - MONGO_INITDB_ROOT_PASSWORD=mongo
+      volumes:
+      - ./mongo-data:/data/db
+      ports:
+      - 27017:27017
+
     ui:
       build: 
         context: /home/hrvwnd/Documents/git/QA-Portal/qa-portal-angular
         dockerfile: Dockerfile
+      volumes:
+      - type: bind
+        source: ../qa-portal-angular/nginx.conf
+        target: /etc/nginx/nginx.conf
+      ports:
+        - target: 80
+          published: 80
+          protocol: tcp  
 
     portal-app-api:
       build: 
