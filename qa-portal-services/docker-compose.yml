@@ -36,7 +36,7 @@ services:
 
     ui:
       build: 
-        context: ../qa-portal-angular/
+        context: /home/hrvwnd/Documents/git/QA-Portal/qa-portal-angular
         dockerfile: Dockerfile
 
     portal-app-api:
@@ -128,6 +128,6 @@ services:
       - ENABLE_PUBLIC_ENDPOINTS=true
       depends_on:
       - postgres
-      
+
 volumes:
   db-data:      
