@@ -1,5 +1,9 @@
 version: '3.7'
 services:
+    ui:
+      build: 
+        context: ../qa-portal-angular/
+        dockerfile: Dockerfile
     portal-app-api:
       build: 
         context: ./
@@ -36,4 +40,3 @@ services:
         args: 
           - PROJECT=self-reflection-api
         dockerfile: Dockerfile
-      
