@@ -1,27 +1,5 @@
 version: '3.7'
-services:
-
-    nginx:
-      container_name: nginx
-      image: nginx:latest
-      volumes: 
-      - type: bind
-        source: ../qa-portal-angular/nginx.conf
-        target: /etc/nginx/nginx.conf
-      ports:
-        - target: 80
-          published: 80
-          protocol: tcp
-      deploy:
-        replicas: 1
-      depends_on: 
-        - ui
-        - portal-app-api
-        - cohort-api
-        - cv-api
-        - feedback-api
-        - form-api
-        - self-reflection-api      
+services:  
 
     postgres:
       image: postgres
@@ -43,7 +21,7 @@ services:
       volumes:
       - ./mongo-data:/data/db
       ports:
-      - 27017:27017
+      - 27019:27017
 
     ui:
       build: 
@@ -87,7 +65,7 @@ services:
       - ENABLE_PUBLIC_ENDPOINTS=true
       depends_on:
       - postgres
-      
+
     cv-api:
       build: 
         context: ./
@@ -150,4 +128,5 @@ services:
       - postgres
 
 volumes:
-  db-data:      
+  db-data:
+  mongo-data:      

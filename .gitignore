@@ -1,6 +1,9 @@
 HELP.md
 !.mvn/wrapper/maven-wrapper.jar
 
+#Next Level what is this ignore
+/qa-portal-service/mongo-data/*
+
 # compiled output
 bin
 .metadata

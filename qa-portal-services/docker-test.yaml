@@ -1,14 +1,13 @@
 version: '3.7'
 services:
-    ui:
-      build: 
-        context: /home/hrvwnd/Documents/git/QA-Portal/qa-portal-angular
-        dockerfile: Dockerfile
+
+    mongo:
+      image: mongo
+      environment:
+      - MONGO_INITDB_DATABASE=qa-portal
+      - MONGO_INITDB_ROOT_USERNAME=mongo
+      - MONGO_INITDB_ROOT_PASSWORD=mongo
       volumes:
-      - type: bind
-        source: ../qa-portal-angular/nginx.conf
-        target: /etc/nginx/nginx.conf
+      - ./mongo-data:/data/db
       ports:
-        - target: 80
-          published: 80
-          protocol: tcp
+      - 27019:27017
