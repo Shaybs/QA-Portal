@@ -1,9 +1,44 @@
 version: '3.7'
 services:
+
+    nginx:
+      container_name: nginx
+      image: nginx:latest
+      volumes: 
+      - type: bind
+        source: ../qa-portal-angular/nginx.conf
+        target: /etc/nginx/nginx.conf
+      ports:
+        - target: 80
+          published: 80
+          protocol: tcp
+      deploy:
+        replicas: 1
+      depends_on: 
+        - ui
+        - portal-app-api
+        - cohort-api
+        - cv-api
+        - feedback-api
+        - form-api
+        - self-reflection-api
+
+    postgres:
+      image: postgres
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_DB=qa-portal
+      volumes:
+        - db-data:/var/lib/postgresql/data/
+      ports:
+        - "5434:5432"
+
     ui:
       build: 
         context: ../qa-portal-angular/
         dockerfile: Dockerfile
+
     portal-app-api:
       build: 
         context: ./
@@ -16,6 +51,8 @@ services:
       - POSTGRES_DB=qa-portal
       - POSTGRES_HOST=postgres
       - ENABLE_PUBLIC_ENDPOINTS=true
+      depends_on:
+      - postgres
 
     cohort-api:
       build: 
@@ -29,6 +66,8 @@ services:
       - POSTGRES_DB=qa-portal
       - POSTGRES_HOST=postgres
       - ENABLE_PUBLIC_ENDPOINTS=true
+      depends_on:
+      - postgres
       
     cv-api:
       build: 
@@ -42,6 +81,8 @@ services:
       - POSTGRES_DB=qa-portal
       - POSTGRES_HOST=postgres
       - ENABLE_PUBLIC_ENDPOINTS=true
+      depends_on:
+      - postgres
       
     feedback-api:
       build: 
@@ -55,6 +96,8 @@ services:
       - POSTGRES_DB=qa-portal
       - POSTGRES_HOST=postgres
       - ENABLE_PUBLIC_ENDPOINTS=true
+      depends_on:
+      - postgres
       
     form-api:
       build: 
@@ -68,6 +111,8 @@ services:
       - POSTGRES_DB=qa-portal
       - POSTGRES_HOST=postgres
       - ENABLE_PUBLIC_ENDPOINTS=true
+      depends_on:
+      - postgres
       
     self-reflection-api:
       build: 
@@ -81,4 +126,8 @@ services:
       - POSTGRES_DB=qa-portal
       - POSTGRES_HOST=postgres
       - ENABLE_PUBLIC_ENDPOINTS=true
+      depends_on:
+      - postgres
       
+volumes:
+  db-data:      
