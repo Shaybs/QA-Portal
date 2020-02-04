@@ -102,6 +102,7 @@ services:
       - ENABLE_PUBLIC_ENDPOINTS=true
       depends_on:
       - postgres
+      - mongo
       
     feedback-api:
       build: 
