@@ -10,33 +10,75 @@ services:
         args: 
           - PROJECT=portal-application-api
         dockerfile: Dockerfile
+      environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=qa-portal
+      - POSTGRES_HOST=postgres
+      - ENABLE_PUBLIC_ENDPOINTS=true
+
     cohort-api:
       build: 
         context: ./
         args: 
           - PROJECT=cohort-api
         dockerfile: Dockerfile
+      environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=qa-portal
+      - POSTGRES_HOST=postgres
+      - ENABLE_PUBLIC_ENDPOINTS=true
+      
     cv-api:
       build: 
         context: ./
         args: 
           - PROJECT=cv-api
         dockerfile: Dockerfile
+      environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=qa-portal
+      - POSTGRES_HOST=postgres
+      - ENABLE_PUBLIC_ENDPOINTS=true
+      
     feedback-api:
       build: 
         context: ./
         args: 
           - PROJECT=feedback-api
         dockerfile: Dockerfile
+      environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=qa-portal
+      - POSTGRES_HOST=postgres
+      - ENABLE_PUBLIC_ENDPOINTS=true
+      
     form-api:
       build: 
         context: ./
         args: 
           - PROJECT=form-api
         dockerfile: Dockerfile
+      environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=qa-portal
+      - POSTGRES_HOST=postgres
+      - ENABLE_PUBLIC_ENDPOINTS=true
+      
     self-reflection-api:
       build: 
         context: .
         args: 
           - PROJECT=self-reflection-api
         dockerfile: Dockerfile
+      environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=qa-portal
+      - POSTGRES_HOST=postgres
+      - ENABLE_PUBLIC_ENDPOINTS=true
+      
