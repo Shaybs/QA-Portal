@@ -6,11 +6,17 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=qa-portal
-  cv-ui:
-    image: qa-cv-standalone:latest
+    volumes:
+      - db-data:/var/lib/postgresql/data/
     ports:
-      - target: 9001
-        published: 9001
+      - "5433:5432"
+
+  #cv-ui:
+   # image: qa-cv-standalone:latest
+    #ports:
+     # - target: 9001
+      #  published: 9001
+
   cv-api:
     image: cv-api:latest
     ports:
@@ -25,3 +31,9 @@ services:
       - ENABLE_PUBLIC_ENDPOINTS=true
     depends_on:
       - postgres
+  
+  #mongodb:
+   # image: ""
+
+volumes:
+  db-data:
