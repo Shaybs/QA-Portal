@@ -1,0 +1,39 @@
+version: '3.7'
+services:
+    portal-app-api:
+      build: 
+        context: ./
+        args: 
+          - PROJECT=portal-application-api
+        dockerfile: Dockerfile
+    cohort-api:
+      build: 
+        context: ./
+        args: 
+          - PROJECT=cohort-api
+        dockerfile: Dockerfile
+    cv-api:
+      build: 
+        context: ./
+        args: 
+          - PROJECT=cv-api
+        dockerfile: Dockerfile
+    feedback-api:
+      build: 
+        context: ./
+        args: 
+          - PROJECT=feedback-api
+        dockerfile: Dockerfile
+    form-api:
+      build: 
+        context: ./
+        args: 
+          - PROJECT=form-api
+        dockerfile: Dockerfile
+    self-reflection-api:
+      build: 
+        context: .
+        args: 
+          - PROJECT=self-reflection-api
+        dockerfile: Dockerfile
+      
