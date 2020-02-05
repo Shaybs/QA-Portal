@@ -15,16 +15,14 @@ services:
     keycloak:
       image: jboss/keycloak:6.0.1
       environment:
-        - DB_VENDOR=POSTGRES
-        - DB_ADDR=postgres
-        - DB_DATABASE=qa-portal
-        - DB_USER=postgres
-        - DB_SCHEMA=public
-        - DB_PASSWORD=postgres
         - KEYCLOAK_USER=admin
         - KEYCLOAK_PASSWORD=admin
-        - PROXY_ADDRESS_FORWARDING=true
         - KEYCLOAK_IMPORT=/tmp/realm.json
+        - DB_DATABASE=qa-portal
+        - DB_USER=postgres
+        - DB_PASSWORD=postgres
+        - PROXY_ADDRESS_FORWARDING=true
+        - DB_SCHEMA=public
       volumes:
         - type: bind
           source: ./qa-portal-infra/keycloak/exported_realms/qa-portal-realm.json
