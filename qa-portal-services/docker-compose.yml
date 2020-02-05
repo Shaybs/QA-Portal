@@ -24,8 +24,9 @@ services:
       - 27019:27017
 
     ui:
+      image: shaybs/ui:${BUILD_NUMBER}
       build: 
-        context: /home/hrvwnd/Documents/git/QA-Portal/qa-portal-angular
+        context: ./../qa-portal-angular
         dockerfile: Dockerfile
       volumes:
       - type: bind
@@ -37,6 +38,7 @@ services:
           protocol: tcp  
 
     portal-app-api:
+      image: shaybs/portal-app-api:${BUILD_NUMBER}
       build: 
         context: ./
         args: 
@@ -52,6 +54,7 @@ services:
       - postgres
 
     cohort-api:
+      image: shaybs/cohort-api:${BUILD_NUMBER}
       build: 
         context: ./
         args: 
@@ -67,6 +70,7 @@ services:
       - postgres
 
     cv-api:
+      image: shaybs/cv-api:${BUILD_NUMBER}
       build: 
         context: ./
         args: 
@@ -83,6 +87,7 @@ services:
       - mongo
       
     feedback-api:
+      image: shaybs/feedback-api:${BUILD_NUMBER}
       build: 
         context: ./
         args: 
@@ -98,6 +103,7 @@ services:
       - postgres
       
     form-api:
+      image: shaybs/form-api:${BUILD_NUMBER}
       build: 
         context: ./
         args: 
@@ -113,6 +119,7 @@ services:
       - postgres
       
     self-reflection-api:
+      image: shaybs/self-reflection-api:${BUILD_NUMBER}
       build: 
         context: .
         args: 
