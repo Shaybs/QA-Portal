@@ -75,7 +75,7 @@ services:
 
     ui:
       container_name: ui
-      image: qa-portal-jenkins:5000/ui
+      image: 18.130.218.1:5000/ui
       build: 
         context: ./qa-portal-angular
         dockerfile: Dockerfile
@@ -83,7 +83,7 @@ services:
         replicas: 1
 
     portal-app-api:
-      image: qa-portal-jenkins:5000/portal-app-api 
+      image: 18.130.218.1:5000/portal-app-api 
       container_name: portal-app-api
       build: 
         context: ./qa-portal-services
@@ -103,7 +103,7 @@ services:
 
     cohort-api:
       container_name: cohort-api
-      image: qa-portal-jenkins:5000/cohort-api
+      image: 18.130.218.1:5000/cohort-api
       build: 
         context: ./qa-portal-services
         args: 
@@ -122,7 +122,7 @@ services:
 
     cv-api:
       container_name: cv-api
-      image: qa-portal-jenkins:5000/cv-api
+      image: 18.130.218.1:5000/cv-api
       build: 
         context: ./qa-portal-services
         args: 
@@ -142,7 +142,7 @@ services:
       
     feedback-api:
       container_name: feedback-api
-      image: qa-portal-jenkins:5000/feedback-api
+      image: 18.130.218.1:5000/feedback-api
       build: 
         context: ./qa-portal-services
         args: 
@@ -161,7 +161,7 @@ services:
       
     form-api:
       container_name: form-api
-      image: qa-portal-jenkins:5000/form-api
+      image: 18.130.218.1:5000/form-api
       build: 
         context: ./qa-portal-services
         args: 
@@ -180,7 +180,7 @@ services:
       
     self-reflection-api:
       container_name: self-reflection-api
-      image: qa-portal-jenkins:5000/self-reflection-api
+      image: 18.130.218.1:5000/self-reflection-api
       build: 
         context: ./qa-portal-services
         args: 
