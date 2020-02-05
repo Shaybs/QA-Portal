@@ -34,7 +34,7 @@ services:
           source: ./qa-portal-infra/keycloak/exported_realms
           target: /opt/jboss/exported_realms
       ports:
-        - "8080:8080"
+        - "8443:8443"
       depends_on:
         - postgres
 
