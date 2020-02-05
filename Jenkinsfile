@@ -9,7 +9,8 @@ pipeline{
                             cd QA-Portal/
 			    git pull origin convert-to-stack
                             #docker swarm init
-                            docker stack deploy --compose-file docker-compose.yaml qa-portal-app
+                            ls
+                            docker stack deploy --compose-file docker-compose.yml qa-portal-app
                             '''
                     }
                 }
