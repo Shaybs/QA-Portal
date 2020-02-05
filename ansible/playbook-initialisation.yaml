@@ -145,12 +145,12 @@
       - registry-volume:/var/lib/registry
   - git:
       repo: 'https://github.com/Shaybs/QA-Portal.git'
-      dest: /home/ubuntu/Shaybs
+      dest: /home/ubuntu/
       version: development-aws
 
   - name: build images2
     shell:
-      cmd: "cd /home/ubuntu/Shaybs && docker-compose build"
+      cmd: "cd /home/ubuntu && docker-compose build"
     remote_user: jenkins
 
 - hosts: app
