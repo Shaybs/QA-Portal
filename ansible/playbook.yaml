@@ -1,0 +1,193 @@
+- hosts: ansible-jenkins
+  become: true
+  tasks:
+  - name: jenkins user
+    user:
+      name: jenkins
+      shell: /bin/bash
+
+  - name: install java
+    apt:
+      name: openjdk-8-jdk
+      state: latest
+
+  - name: jenkins gpg key
+    apt_key:
+      url: "https://pkg.jenkins.io/debian/jenkins.io.key"
+      state: present
+
+  - name: jenkins apt repo
+    apt_repository:
+      repo: "deb http://pkg.jenkins.io/debian-stable binary/"
+      state: present
+
+  - name: jenkins install
+    apt:
+      name: jenkins
+      state: latest
+      update_cache: true
+  - name: jenkins service
+    service:
+      name: jenkins
+      state: started
+
+- hosts: all
+  become: true
+  tasks:
+  - name: update certificates
+    apt:
+      pkg:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg-agent
+      - software-properties-common
+      state: latest
+      update_cache: true
+
+  - name: docker gpg key
+    apt_key:
+      url: "https://download.docker.com/linux/ubuntu/gpg"
+      state: present
+
+  - name: docker apt repository
+    apt_repository:
+      repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+      state: present
+
+  - name: docker install
+    apt      name: python3-pip
+tate: latest
+      update_cache: true
+  - name: docker service
+    service:
+      name: docker
+      state: started
+
+- hosts: all
+  become: true
+  tasks:
+  - name: Add docker permissions
+    user:
+      name: jenkins
+      groups:
+      - docker
+      append: true
+      shell: /bin/bash
+
+- hosts: ansible-jenkins
+  become: true
+  tasks:
+  - name: "ssh folder"
+    file:
+      path: /home/jenkin/.ssh
+      state: directory
+      mode: "0700"
+      owner: jenkins
+      group: jenkins
+  - name: "Copy private key to ansible-jenkins"
+    copy:
+      src: /home/qa-admin/ansible/jenkins_id_rsa
+      dest: /home/jenkins/.ssh/id_rsa
+      owner: jenkins
+      group: jenkins
+      mode: u=rw,g=,o=
+
+- hosts: ansible-swarm
+  become: true
+  tasks:
+  - name: "ssh folder"
+    file:
+      path: /home/jenkin/.ssh
+      state: directory
+      mode: "0700"
+      owner: jenkins
+      group: jenkins
+  - name: Copy private key to ansible-swarm
+    copy:
+      src: /home/qa-admin/ansible/jenkins_id_rsa.pub
+      dest: /home/jenkins/.ssh/authorized_keys
+      owner: jenkins
+      mode: u=rw,g=,o=
+
+
+
+image="jenkins-swarm:5000/python-http-server:build-${BUILD_NUMBER}"
+docker build -t ${image} .
+docker push ${image}
+
+ssh swarm-new << EOF
+docker service update --image ${image} python-http-server
+EOF
+
+
+docker run -d --name registry --volume registry-volume:/var/lib/registry -p 5000:5000 registry:2
+
+
+- name: data container
+  docker:
+    name: mydata
+    image: busybox
+    state: present
+    volumes:
+    - /data
+
+# Ensure that a Redis server is running, using the volume from the data
+# container. Expose the default Redis port.
+
+- name: 
+  docker:
+    name: myredis
+    image: redis
+    command: redis-server --appendonly yes
+    state: started
+    expose:
+    - 6379
+    volumes_from:
+    - mydata
+
+# Ensure that a container of your application server is running. This will:
+# - pull the latest version of your application image from DockerHub.
+# - ensure that a container is running with the specified name and exact image.
+#   If any configuration options have changed, the existing container will be
+#   stopped and removed, and a new one will be launched in its place.
+# - link this container to the existing redis container launched above with
+#   an alias.
+# - grant the container read write permissions for the host's /dev/sda device
+#   through a node named /dev/xvda
+# - bind TCP port 9000 within the container to port 8080 on all interfaces
+#   on the host.
+# - bind UDP port 9001 within the container to port 8081 on the host, only
+#   listening on localhost.
+# - specify 2 ip resolutions.
+# - set the environment variable SECRET_KEY to "ssssh".
+
+- name: application container
+  docker:
+    name: myapplication
+    image: someuser/appimage
+    state: reloaded
+    pull: always
+    links:
+    - "myredis:aliasedredis"
+    devices:
+    - "/dev/sda:/dev/xvda:rwm"
+    ports:
+    - "8080:9000"
+    - "127.0.0.1:8081:9001/udp"
+    extra_hosts:
+      host1: "192.168.0.1"
+      host2: "192.168.0.2"
+    env:
+      SECRET_KEY: ssssh
+
+# Ensure that exactly five containers of another server are running with this
+# exact image and command. If fewer than five are running, more will be launched;
+# if more are running, the excess will be stopped.
+
+- name: load-balanced containers
+  docker:
+    state: reloaded
+    count: 5
+    image: someuser/anotherappimage
+    command: sleep 1d

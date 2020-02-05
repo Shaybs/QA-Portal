@@ -1,0 +1,48 @@
+- hosts: all
+  become: true
+  tasks:
+  - name: Set up username environment variable
+    lineinfile:
+      path: /home/jenkins/.bashrc
+      state: present
+      insertbefore: "# If not running interactively, don't do anything"
+      line: export USERNAME='root'
+    remote_user: jenkins
+  - name: Set up password environment variable
+    lineinfile:
+      path: /home/jenkins/.bashrc
+      state: present
+      insertbefore: "# If not running interactively, don't do anything"
+      line: export PASSWORD='rootXYZ'
+    remote_user: jenkins
+  - name: Set up mysql url environment variable
+    lineinfile:
+      path: /home/jenkins/.bashrc
+      state: present
+      insertbefore: "# If not running interactively, don't do anything"
+      line: export MYSQL_URL='35.197.196.36'
+    remote_user: jenkins
+  - name: Set up mysql database environment variable
+    lineinfile:
+      path: /home/jenkins/.bashrc
+      state: present
+      insertbefore: "# If not running interactively, don't do anything"
+      line: export MYSQL_DB='bankapp'
+    remote_user: jenkins
+  - name: Set up mysql database environment variable
+    lineinfile:
+      path: /home/jenkins/.bashrc
+      state: present
+      insertbefore: "# If not running interactively, don't do anything"
+      line: export MYSQL_DB_TEST='bankappbackup'
+    remote_user: jenkins
+  - name: Set up secret key variable
+    lineinfile:
+      path: /home/jenkins/.bashrc
+      state: present
+      insertbefore: "# If not running interactively, don't do anything"
+      line: export SECRET_KEY='hjd9848rujjuuIJDF84UjyeKMCD938JUudK'
+    remote_user: jenkins
+
+
+

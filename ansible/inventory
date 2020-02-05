@@ -1,0 +1,20 @@
+
+[jenkins]
+#3.9.134.128
+#18.130.218.1
+
+[app]
+#35.176.114.231
+#35.178.117.104
+
+
+[app:vars]
+ansible_user=ubuntu
+ansible_ssh_private_key_file=~/.ssh/qa-portal-keypair.pem
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+[jenkins:vars]
+ansible_user=ubuntu
+ansible_ssh_private_key_file=~/.ssh/qa-portal-keypair.pem
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+

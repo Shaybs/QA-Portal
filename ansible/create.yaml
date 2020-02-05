@@ -1,0 +1,100 @@
+- hosts: all
+  become: true
+  gather_facts: no
+  tasks:
+  - name: "Wait for system to become reachable"
+    wait_for_connection:
+  - name: "Gather facts for first time"
+    setup:
+  - name: "Install Dependencies"
+    apt:
+      name: git
+      update_cache: yes
+      state: latest
+  - name: "Install Pip"
+    apt:
+      name: python3-pip
+      update_cache: yes
+      state: present
+  - name: update certificates
+    apt:
+      pkg:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg2
+      - software-properties-common
+      state: latest
+      update_cache: true
+  - name: docker gpg key
+    apt_key:
+      url: "https://download.docker.com/linux/debian/gpg"
+      state: present
+  - name: docker apt repository
+    apt_repository:
+      repo: "deb [arch=amd64] https://download.docker.com/linux/debian stretch stable"
+      state: present
+  - name: docker install
+    apt:
+      pkg:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      state: latest
+      update_cache: true
+  - name: docker service
+    service:
+      name: docker
+      state: started
+  - name: Add ubuntu user to the Docker group
+    user:
+      name: ubuntu
+      groups:
+      - docker
+      shell: /bin/bash
+  - name: "create etc/docker folder"
+    file:
+      path: /etc/docker
+      state: directory
+      owner: ubuntu
+      group: ubuntu
+    remote_user: ubuntu
+  - name: "Copy daemon for registry connection"
+    copy:
+      src: /home/qa-admin/PracticalProject/daemon.json
+      dest: /etc/docker/daemon.json
+      owner: ubuntu
+      group: ubuntu
+    remote_user: ubuntu
+  - name: docker service
+    service:
+      name: docker
+      state: restarted
+    remote_user: ubuntu
+  - pip:
+      executable: pip3
+      name:
+      - docker
+      - docker-compose
+      - jsondiff
+  - git:
+      repo: 'https://github.com/devops-cohort/Shaybs.git'
+      dest: /home/ubuntu/Shaybs
+      version: development-aws
+
+  - name: build images2
+    shell:
+      cmd: "cd /home/ubuntu/Shaybs && docker-compose build"
+
+  - name: initialise swarm
+    docker_swarm:
+      state: present
+  - name: Deploy stack from a compose file
+    docker_stack:
+      state: present
+      name: stack
+      compose:
+        - /home/ubuntu/Shaybs/docker-compose.yaml
+
+
+

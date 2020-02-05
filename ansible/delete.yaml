@@ -1,0 +1,16 @@
+- hosts: localhost
+  connection: local
+  tasks:
+  - name: "Delete aws key pair"
+    ec2_key:
+      name: CloudFormationKeyPair
+      state: absent
+  - name: "delete key pair"
+    openssh_keypair:
+      path: ~/.ssh/ansible_id_rsa
+      state: absent
+  - name: "delete stack"
+    cloudformation:
+      state: absent
+      stack_name: test-stack
+      region: eu-west-2
