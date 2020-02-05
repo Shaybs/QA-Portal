@@ -4,6 +4,13 @@ HELP.md
 #Next Level what is this ignore
 /qa-portal-service/mongo-data/*
 
+# TerraForm
+.terraform
+*.terraform
+.vscode
+**/.terraform/*
+.intelliJterraform.tfstateterraform.tfstate.*
+
 # compiled output
 bin
 .metadata
