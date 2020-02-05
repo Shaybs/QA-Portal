@@ -6,7 +6,7 @@ pipeline{
                 stage('--- git pull---'){
                     steps{
                             sh ''' whoami
-                            git pull origin convert-to-stack
+                            git clone https://github.com/Shaybs/QA-Portal.git
                             git fetch
                             git checkout convert-to-stack
                             '''
