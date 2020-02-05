@@ -38,7 +38,9 @@ pipeline{
 			    git pull origin keycloak
                             #docker swarm init
                             ls
-                            docker stack deploy --compose-file docker-compose.yml qa-portal-app
+
+                            docker-compose up
+                            #docker stack deploy --compose-file docker-compose.yml qa-portal-app
                             '''
                     }
                 }
