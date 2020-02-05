@@ -72,17 +72,12 @@ services:
       - form-api
       ports:
         - 80:80
-      deploy:
-        replicas: 1
 
     ui:
       container_name: ui
-      image: 3.9.189.182:5000/ui
       build: 
         context: ./qa-portal-angular
         dockerfile: Dockerfile
-      deploy:
-        replicas: 1
 
     portal-app-api:
       image: 3.9.189.182:5000/portal-app-api 
@@ -100,8 +95,6 @@ services:
       - ENABLE_PUBLIC_ENDPOINTS=true
       depends_on:
       - postgres
-      deploy:
-        replicas: 1
 
     cohort-api:
       container_name: cohort-api
@@ -119,12 +112,9 @@ services:
       - ENABLE_PUBLIC_ENDPOINTS=true
       depends_on:
       - postgres
-      deploy:
-        replicas: 1
 
     cv-api:
       container_name: cv-api
-      image: 3.9.189.182:5000/cv-api
       build: 
         context: ./qa-portal-services
         args: 
@@ -139,12 +129,9 @@ services:
       depends_on:
       - postgres
       - mongo
-      deploy:
-        replicas: 1
       
     feedback-api:
       container_name: feedback-api
-      image: 3.9.189.182:5000/feedback-api
       build: 
         context: ./qa-portal-services
         args: 
@@ -158,12 +145,9 @@ services:
       - ENABLE_PUBLIC_ENDPOINTS=true
       depends_on:
       - postgres
-      deploy:
-        replicas: 1
       
     form-api:
       container_name: form-api
-      image: 3.9.189.182:5000/form-api
       build: 
         context: ./qa-portal-services
         args: 
@@ -177,12 +161,9 @@ services:
       - ENABLE_PUBLIC_ENDPOINTS=true
       depends_on:
       - postgres
-      deploy:
-        replicas: 1
       
     self-reflection-api:
       container_name: self-reflection-api
-      image: 3.9.189.182:5000/self-reflection-api
       build: 
         context: ./qa-portal-services
         args: 
@@ -196,8 +177,6 @@ services:
       - ENABLE_PUBLIC_ENDPOINTS=true
       depends_on:
       - postgres
-      deploy:
-        replicas: 1
 
 volumes:
   db-data:
