@@ -33,7 +33,7 @@ pipeline{
                 }
                 stage('---deploy---'){
                     steps{
-                            sh '''ssh -t 35.178.181.167 << EOF
+                            sh '''ssh -t 3.9.189.182 << EOF
                             cd QA-Portal/
 			    git pull origin keycloak
                             #docker swarm init
