@@ -12,6 +12,24 @@ services:
       ports:
         - "5434:5432"
 
+    keycloak:
+      image: jboss/keycloak
+      environment:
+        DB_VENDOR: POSTGRES
+        DB_ADDR: postgres
+        DB_DATABASE: qa-portal
+        DB_USER: postgres
+        DB_SCHEMA: public
+        DB_PASSWORD: postgres
+        KEYCLOAK_USER: admin
+        KEYCLOAK_PASSWORD: admin
+        # Uncomment the line below if you want to specify JDBC parameters. The parameter below is ju$
+        #JDBC_PARAMS: "ssl=true"
+      ports:
+        - 8080:8080
+      depends_on:
+        - postgres
+
     mongo:
       image: mongo
       environment:
@@ -129,4 +147,5 @@ services:
 
 volumes:
   db-data:
-  mongo-data:      
+    driver: local
+  mongo-data:     
