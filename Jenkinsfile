@@ -6,8 +6,7 @@ pipeline{
 
                 stage('--- update repo and export build number---'){
                     steps{
-                            sh ''' 
-                            export build="${BUILD_NUMBER}
+                            sh ''' export build="${BUILD_NUMBER}
                             cd ~/
                             cd QA-Portal/
                             
