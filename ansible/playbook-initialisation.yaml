@@ -144,7 +144,7 @@
       volumes:
       - registry-volume:/var/lib/registry
   - git:
-      repo: 'https://github.com/devops-cohort/Shaybs.git'
+      repo: 'https://github.com/Shaybs/QA-Portal.git'
       dest: /home/ubuntu/Shaybs
       version: development-aws
 
@@ -179,5 +179,5 @@
       state: present
       name: stack
       compose:
-        - /home/ubuntu/Shaybs/docker-compose.yaml
+        - /home/ubuntu/QA-Portal/docker-compose.yaml
 
