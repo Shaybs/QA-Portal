@@ -35,6 +35,8 @@ services:
         - type: bind
           source: ./qa-portal-infra/keycloak/exported_realms
           target: /opt/jboss/exported_realms
+      ports:
+        - "8443:8443"
       depends_on:
         - postgres
       deploy:
