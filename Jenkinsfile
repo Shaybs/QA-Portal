@@ -12,9 +12,9 @@ pipeline{
                             
                             git pull origin keycloak
                             '''
-
-
                     }
+
+                }
                 
                 stage('---Prune, build and push images---'){
                     steps{
@@ -32,9 +32,10 @@ pipeline{
                             docker-compose up -d 
                             # docker swarm init
                             # docker stack deploy --compose-file QA-portal/docker-compose.yaml qa-portal-app
-                            
+
                             '''
                     }
                 }
         }
 }
+
