@@ -11,6 +11,7 @@ pipeline{
                             pwd
                             echo "/home/jenkins/QA-Portal"
                             cd QA-Portal/
+                            git checkout convert-to-stack
                             git pull origin convert-to-stack
                             '''
                     }
@@ -19,7 +20,11 @@ pipeline{
                 
                 stage('---Prune, build and push images---'){
                     steps{
-                            sh ''' docker system prune -af
+                            sh '''
+                            pwd
+                            cd /home/jenkins/QA-Portal
+                            git checkout convert-to-stack
+                            docker system prune -af
                             docker-compose build
                             docker-compose push
                             '''
