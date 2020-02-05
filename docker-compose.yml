@@ -2,6 +2,7 @@ version: '3.7'
 services:  
 
     postgres:
+      container_name: postgress
       image: postgres
       environment:
         - POSTGRES_USER=postgres
@@ -11,8 +12,11 @@ services:
         - db-data:/var/lib/postgresql/data/
       ports:
         - "5433:5432"
+      deploy:
+        replicas: 1
 
     keycloak:
+      container_name: keycloak
       image: jboss/keycloak:6.0.1
       command:  -Dkeycloak.migration.action=import -Dkeycloak.migration.provider=dir -Dkeycloak.migration.dir=/opt/jboss/exported_realms -Dkeycloak.migration.strategy=OVERWRITE_EXISTING
       environment:
@@ -33,8 +37,11 @@ services:
           target: /opt/jboss/exported_realms
       depends_on:
         - postgres
+      deploy:
+        replicas: 1
 
     mongo:
+      container_name: mongo
       image: mongo
       environment:
       - MONGO_INITDB_DATABASE=qa-portal
@@ -44,8 +51,11 @@ services:
       - ./mongo-data:/data/db
       ports:
       - 27019:27017
-    
+      deploy:
+        replicas: 1
+
     nginx:
+      container_name: nginx
       image: nginx:alpine
       volumes:
       - type: bind
@@ -62,13 +72,21 @@ services:
       - form-api
       ports:
         - 80:80
+      deploy:
+        replicas: 1
 
     ui:
+      container_name: ui
+      image: 18.130.218.1:5000/ui
       build: 
         context: ./qa-portal-angular
         dockerfile: Dockerfile
+      deploy:
+        replicas: 1
 
     portal-app-api:
+      image: 18.130.218.1:5000/portal-app-api 
+      container_name: portal-app-api
       build: 
         context: ./qa-portal-services
         args: 
@@ -82,8 +100,12 @@ services:
       - ENABLE_PUBLIC_ENDPOINTS=true
       depends_on:
       - postgres
+      deploy:
+        replicas: 1
 
     cohort-api:
+      container_name: cohort-api
+      image: 18.130.218.1:5000/cohort-api
       build: 
         context: ./qa-portal-services
         args: 
@@ -97,8 +119,12 @@ services:
       - ENABLE_PUBLIC_ENDPOINTS=true
       depends_on:
       - postgres
+      deploy:
+        replicas: 1
 
     cv-api:
+      container_name: cv-api
+      image: 18.130.218.1:5000/cv-api
       build: 
         context: ./qa-portal-services
         args: 
@@ -113,8 +139,12 @@ services:
       depends_on:
       - postgres
       - mongo
+      deploy:
+        replicas: 1
       
     feedback-api:
+      container_name: feedback-api
+      image: 18.130.218.1:5000/feedback-api
       build: 
         context: ./qa-portal-services
         args: 
@@ -128,8 +158,12 @@ services:
       - ENABLE_PUBLIC_ENDPOINTS=true
       depends_on:
       - postgres
+      deploy:
+        replicas: 1
       
     form-api:
+      container_name: form-api
+      image: 18.130.218.1:5000/form-api
       build: 
         context: ./qa-portal-services
         args: 
@@ -143,8 +177,12 @@ services:
       - ENABLE_PUBLIC_ENDPOINTS=true
       depends_on:
       - postgres
+      deploy:
+        replicas: 1
       
     self-reflection-api:
+      container_name: self-reflection-api
+      image: 18.130.218.1:5000/self-reflection-api
       build: 
         context: ./qa-portal-services
         args: 
@@ -158,6 +196,8 @@ services:
       - ENABLE_PUBLIC_ENDPOINTS=true
       depends_on:
       - postgres
+      deploy:
+        replicas: 1
 
 volumes:
   db-data:
