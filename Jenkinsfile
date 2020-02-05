@@ -3,21 +3,13 @@ pipeline{
 
         stages{
 
-                stage('--- git pull---'){
-                    steps{
-                            sh ''' git pull origin convert-to-stack
-                            git fetch
-                            git checkout convert-to-stack
-                            '''
-                    }
-
-                }
-            
 
                 stage('--- update repo and export build number---'){
                     steps{
                             sh ''' export build="${BUILD_NUMBER}"
                             cd ~/
+                            pwd
+                            echo "/home/jenkins/QA-Portal"
                             cd QA-Portal/
                             git pull origin convert-to-stack
                             '''
