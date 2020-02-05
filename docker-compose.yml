@@ -1,0 +1,203 @@
+version: '3.7'
+services:  
+
+    postgres:
+      container_name: postgress
+      image: postgres
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_DB=qa-portal
+      volumes:
+        - db-data:/var/lib/postgresql/data/
+      ports:
+        - "5433:5432"
+      deploy:
+        replicas: 1
+
+    keycloak:
+      container_name: keycloak
+      image: jboss/keycloak:6.0.1
+      environment:
+        - KEYCLOAK_USER=admin
+        - KEYCLOAK_PASSWORD=admin
+        - KEYCLOAK_IMPORT=/tmp/realm.json
+        - DB_DATABASE=qa-portal
+        - DB_USER=postgres
+        - DB_PASSWORD=postgres
+        - PROXY_ADDRESS_FORWARDING=true
+        - DB_SCHEMA=public
+      volumes:
+        - type: bind
+          source: ./qa-portal-infra/keycloak/exported_realms/qa-portal-realm.json
+          target: /tmp/realm.json
+      ports:
+        - 8080:8080
+      depends_on:
+        - postgres
+      deploy:
+        replicas: 1
+
+    mongo:
+      container_name: mongo
+      image: mongo
+      environment:
+      - MONGO_INITDB_DATABASE=qa-portal
+      - MONGO_INITDB_ROOT_USERNAME=mongo
+      - MONGO_INITDB_ROOT_PASSWORD=mongo
+      volumes:
+      - ./mongo-data:/data/db
+      ports:
+      - 27019:27017
+      deploy:
+        replicas: 1
+
+    nginx:
+      container_name: nginx
+      image: nginx:alpine
+      volumes:
+      - type: bind
+        source: ./nginx.conf
+        target: /etc/nginx/nginx.conf
+      depends_on:
+      - keycloak
+      - portal-app-api
+      - ui
+      - cohort-api
+      - cv-api
+      - feedback-api
+      - self-reflection-api
+      - form-api
+      ports:
+        - 80:80
+      deploy:
+        replicas: 1
+
+    ui:
+      container_name: ui
+      image: 18.130.218.1:5000/ui
+      build: 
+        context: ./qa-portal-angular
+        dockerfile: Dockerfile
+      deploy:
+        replicas: 1
+
+    portal-app-api:
+      image: 18.130.218.1:5000/portal-app-api 
+      container_name: portal-app-api
+      build: 
+        context: ./qa-portal-services
+        args: 
+          - PROJECT=portal-application-api
+        dockerfile: Dockerfile
+      environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=qa-portal
+      - POSTGRES_HOST=postgres
+      - ENABLE_PUBLIC_ENDPOINTS=true
+      depends_on:
+      - postgres
+      deploy:
+        replicas: 1
+
+    cohort-api:
+      container_name: cohort-api
+      image: 18.130.218.1:5000/cohort-api
+      build: 
+        context: ./qa-portal-services
+        args: 
+          - PROJECT=cohort-api
+        dockerfile: Dockerfile
+      environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=qa-portal
+      - POSTGRES_HOST=postgres
+      - ENABLE_PUBLIC_ENDPOINTS=true
+      depends_on:
+      - postgres
+      deploy:
+        replicas: 1
+
+    cv-api:
+      container_name: cv-api
+      image: 18.130.218.1:5000/cv-api
+      build: 
+        context: ./qa-portal-services
+        args: 
+          - PROJECT=cv-api
+        dockerfile: Dockerfile
+      environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=qa-portal
+      - POSTGRES_HOST=postgres
+      - ENABLE_PUBLIC_ENDPOINTS=true
+      depends_on:
+      - postgres
+      - mongo
+      deploy:
+        replicas: 1
+      
+    feedback-api:
+      container_name: feedback-api
+      image: 18.130.218.1:5000/feedback-api
+      build: 
+        context: ./qa-portal-services
+        args: 
+          - PROJECT=feedback-api
+        dockerfile: Dockerfile
+      environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=qa-portal
+      - POSTGRES_HOST=postgres
+      - ENABLE_PUBLIC_ENDPOINTS=true
+      depends_on:
+      - postgres
+      deploy:
+        replicas: 1
+      
+    form-api:
+      container_name: form-api
+      image: 18.130.218.1:5000/form-api
+      build: 
+        context: ./qa-portal-services
+        args: 
+          - PROJECT=form-api
+        dockerfile: Dockerfile
+      environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=qa-portal
+      - POSTGRES_HOST=postgres
+      - ENABLE_PUBLIC_ENDPOINTS=true
+      depends_on:
+      - postgres
+      deploy:
+        replicas: 1
+      
+    self-reflection-api:
+      container_name: self-reflection-api
+      image: 18.130.218.1:5000/self-reflection-api
+      build: 
+        context: ./qa-portal-services
+        args: 
+          - PROJECT=self-reflection-api
+        dockerfile: Dockerfile
+      environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=qa-portal
+      - POSTGRES_HOST=postgres
+      - ENABLE_PUBLIC_ENDPOINTS=true
+      depends_on:
+      - postgres
+      deploy:
+        replicas: 1
+
+volumes:
+  db-data:
+    driver: local
+  mongo-data:     

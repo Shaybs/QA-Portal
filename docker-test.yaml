@@ -1,0 +1,11 @@
+version: '3.7'
+services:
+
+  ui:
+    container_name: ui
+    image: 18.130.218.1:5000/ui
+    build: 
+      context: ./qa-portal-angular
+      dockerfile: Dockerfile
+    deploy:
+      replicas: 1
