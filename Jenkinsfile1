@@ -24,7 +24,7 @@ pipeline{
                             pwd
                             cd /home/jenkins/QA-Portal
                             git checkout convert-to-stack
-                            docker system prune -af
+                            
                             docker-compose build
                             docker-compose push
                             '''
@@ -33,11 +33,11 @@ pipeline{
                 }
                 stage('---deploy---'){
                     steps{
-                            sh '''ssh -t 
+                            sh '''ssh -t 35.178.117.104 << EOF
                             cd QA-Portal/
-                            docker-compose up -d 
-                            # docker swarm init
-                            # docker stack deploy --compose-file QA-portal/docker-compose.yaml qa-portal-app
+			    git pull origin convert-to-stack
+                            docker swarm init
+                            docker stack deploy --compose-file QA-portal/docker-compose.yaml qa-portal-app
                             '''
                     }
                 }
