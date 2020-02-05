@@ -11,8 +11,8 @@ pipeline{
                             pwd
                             echo "/home/jenkins/QA-Portal"
                             cd QA-Portal/
-                            git checkout convert-to-stack
-                            git pull origin convert-to-stack
+                            git checkout keycloak
+                            git pull origin keycloak
                             '''
                     }
 
@@ -23,7 +23,7 @@ pipeline{
                             sh '''
                             pwd
                             cd /home/jenkins/QA-Portal
-                            git checkout convert-to-stack
+                            git checkout keycloak
                             
                             docker-compose build
                             docker-compose push
@@ -35,7 +35,7 @@ pipeline{
                     steps{
                             sh '''ssh -t 35.178.117.104 << EOF
                             cd QA-Portal/
-			    git pull origin convert-to-stack
+			    git pull origin keycloak
                             #docker swarm init
                             ls
                             docker stack deploy --compose-file docker-compose.yml qa-portal-app
