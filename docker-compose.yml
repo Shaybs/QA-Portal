@@ -10,21 +10,25 @@ services:
       volumes:
         - db-data:/var/lib/postgresql/data/
       ports:
-        - "5434:5432"
+        - "5433:5432"
 
     keycloak:
-      image: jboss/keycloak
+      image: jboss/keycloak:6.0.1
       environment:
-        DB_VENDOR: POSTGRES
-        DB_ADDR: postgres
-        DB_DATABASE: qa-portal
-        DB_USER: postgres
-        DB_SCHEMA: public
-        DB_PASSWORD: postgres
-        KEYCLOAK_USER: admin
-        KEYCLOAK_PASSWORD: admin
-        # Uncomment the line below if you want to specify JDBC parameters. The parameter below is ju$
-        #JDBC_PARAMS: "ssl=true"
+        - DB_VENDOR=POSTGRES
+        - DB_ADDR=postgres
+        - DB_DATABASE=qa-portal
+        - DB_USER=postgres
+        - DB_SCHEMA=public
+        - DB_PASSWORD=postgres
+        - KEYCLOAK_USER=admin
+        - KEYCLOAK_PASSWORD=admin
+        - PROXY_ADDRESS_FORWARDING=true
+        - KEYCLOAK_IMPORT=/tmp/realm.json
+      volumes:
+        - type: bind
+          source: ./qa-portal-infra/keycloak/exported_realms/qa-portal-realm.json
+          target: /tmp/realm.json
       ports:
         - 8080:8080
       depends_on:
@@ -40,23 +44,33 @@ services:
       - ./mongo-data:/data/db
       ports:
       - 27019:27017
+    
+    nginx:
+      image: nginx:alpine
+      volumes:
+      - type: bind
+        source: ./nginx.conf
+        target: /etc/nginx/nginx.conf
+      depends_on:
+      - keycloak
+      - portal-app-api
+      - ui
+      - cohort-api
+      - cv-api
+      - feedback-api
+      - self-reflection-api
+      - form-api
+      ports:
+        - 80:80
 
     ui:
       build: 
-        context: /home/hrvwnd/Documents/git/QA-Portal/qa-portal-angular
+        context: ./qa-portal-angular
         dockerfile: Dockerfile
-      volumes:
-      - type: bind
-        source: ../qa-portal-angular/nginx.conf
-        target: /etc/nginx/nginx.conf
-      ports:
-        - target: 80
-          published: 80
-          protocol: tcp  
 
     portal-app-api:
       build: 
-        context: ./
+        context: ./qa-portal-services
         args: 
           - PROJECT=portal-application-api
         dockerfile: Dockerfile
@@ -71,7 +85,7 @@ services:
 
     cohort-api:
       build: 
-        context: ./
+        context: ./qa-portal-services
         args: 
           - PROJECT=cohort-api
         dockerfile: Dockerfile
@@ -86,7 +100,7 @@ services:
 
     cv-api:
       build: 
-        context: ./
+        context: ./qa-portal-services
         args: 
           - PROJECT=cv-api
         dockerfile: Dockerfile
@@ -102,7 +116,7 @@ services:
       
     feedback-api:
       build: 
-        context: ./
+        context: ./qa-portal-services
         args: 
           - PROJECT=feedback-api
         dockerfile: Dockerfile
@@ -117,7 +131,7 @@ services:
       
     form-api:
       build: 
-        context: ./
+        context: ./qa-portal-services
         args: 
           - PROJECT=form-api
         dockerfile: Dockerfile
@@ -132,7 +146,7 @@ services:
       
     self-reflection-api:
       build: 
-        context: .
+        context: ./qa-portal-services
         args: 
           - PROJECT=self-reflection-api
         dockerfile: Dockerfile

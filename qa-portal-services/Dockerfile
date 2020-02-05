@@ -17,11 +17,10 @@ EXPOSE 8080
 
 ENTRYPOINT [ \
     "/usr/bin/java", \
-    "-Donedrive.isActive=${ENABLE_ONEDRIVE}", \
-    "-Dcv.enable_public_endpoints=${ENABLE_PUBLIC_ENDPOINTS}", \
-    "-Dserver.port=8080", \
+    #"-Donedrive.isActive=${ENABLE_ONEDRIVE}", \
+    #"-Dcv.enable_public_endpoints=${ENABLE_PUBLIC_ENDPOINTS}", \
+    #"-Dserver.port=8080", \
     "-Dspring.datasource.url=jdbc:postgresql://${POSTGRES_HOST}:5432/qa-portal", \
     "-jar", \
     "./app.jar" \
 ]
-
