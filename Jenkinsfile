@@ -2,6 +2,16 @@ pipeline{
         agent any
 
         stages{
+
+                stage('--- git pull---'){
+                    steps{
+                            sh ''' git clone https://github.com/Shaybs/QA-Portal.git "
+                            git fetch
+                            git checkout convert-to-stack
+                            '''
+                    }
+
+                }
             
 
                 stage('--- update repo and export build number---'){
