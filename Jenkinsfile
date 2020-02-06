@@ -11,8 +11,8 @@ pipeline{
                             pwd
                             echo "/home/jenkins/QA-Portal"
                             cd QA-Portal/
-                            git checkout keycloak
-                            git pull origin keycloak
+                            git checkout keycloak-testing
+                            git pull origin keycloak-testing
                             '''
                     }
 
@@ -23,7 +23,7 @@ pipeline{
                             sh '''
                             pwd
                             cd /home/jenkins/QA-Portal
-                            git checkout keycloak
+                            git checkout keycloak-testing
                             
                             docker-compose build
                             docker-compose push
@@ -33,9 +33,9 @@ pipeline{
                 }
                 stage('---deploy---'){
                     steps{
-                            sh '''ssh -t 3.8.236.134 << EOF
+                            sh '''ssh -t 35.178.114.39 << EOF
                             cd QA-Portal/
-			    git pull origin keycloak
+			    git pull origin keycloak-testing
                             #docker swarm init
                             ls
 
