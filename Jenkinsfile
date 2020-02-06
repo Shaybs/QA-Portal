@@ -24,7 +24,6 @@ pipeline{
                             pwd
                             cd /home/jenkins/QA-Portal
                             git checkout keycloak
-                            
                             docker-compose build
                             docker-compose push
                             '''
@@ -33,14 +32,15 @@ pipeline{
                 }
                 stage('---deploy---'){
                     steps{
-                            sh '''ssh -t 3.8.236.134 << EOF
+                            sh '''ssh -t 3.11.121.112 << EOF
                             cd QA-Portal/
 			    git pull origin keycloak
                             #docker swarm init
                             ls
-
-                            docker-compose up
-                            #docker stack deploy --compose-file docker-compose.yml qa-portal-app
+                            docker rm -f $(docker ps -qa)
+                            docker image prune -af
+                            #docker-compose up
+                            docker stack deploy --compose-file docker-compose.yml qa-portal-app
                             '''
                     }
                 }
