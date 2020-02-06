@@ -78,7 +78,7 @@ services:
         context: ./qa-portal-angular
         dockerfile: Dockerfile
       deploy:
-        replicas: 3
+        replicas: 1
 
     portal-app-api:
       image: 3.11.139.49:5000/portal-app-api 
@@ -97,7 +97,7 @@ services:
       depends_on:
       - postgres
       deploy:
-        replicas: 3
+        replicas: 1
 
     cohort-api:
       container_name: cohort-api
@@ -116,7 +116,7 @@ services:
       depends_on:
       - postgres
       deploy:
-        replicas: 3
+        replicas: 1
 
     cv-api:
       container_name: cv-api
@@ -136,7 +136,7 @@ services:
       - postgres
       - mongo
       deploy:
-        replicas: 3
+        replicas: 1
       
     feedback-api:
       container_name: feedback-api
@@ -155,7 +155,7 @@ services:
       depends_on:
       - postgres
       deploy:
-        replicas: 3
+        replicas: 1
       
     form-api:
       container_name: form-api
@@ -174,7 +174,7 @@ services:
       depends_on:
       - postgres
       deploy:
-        replicas: 3
+        replicas: 1
       
     self-reflection-api:
       container_name: self-reflection-api
@@ -193,7 +193,7 @@ services:
       depends_on:
       - postgres
       deploy:
-        replicas: 3
+        replicas: 1
 
 volumes:
   db-data:
