@@ -11,7 +11,7 @@ services:
       volumes:
         - db-data:/var/lib/postgresql/data/
       ports:
-        - "5433:5432"
+        - "5432:5432"
 
     keycloak:
       container_name: keycloak
@@ -48,7 +48,7 @@ services:
       volumes:
       - ./mongo-data:/data/db
       ports:
-      - 27019:27017
+      - 27017:27017
       deploy:
         replicas: 1
 
@@ -73,12 +73,13 @@ services:
 
     ui:
       container_name: ui
+      image: 3.11.139.49:5000/ui
       build: 
         context: ./qa-portal-angular
         dockerfile: Dockerfile
 
     portal-app-api:
-      image: 3.9.189.182:5000/portal-app-api 
+      image: 3.11.139.49:5000/portal-app-api 
       container_name: portal-app-api
       build: 
         context: ./qa-portal-services
@@ -96,7 +97,7 @@ services:
 
     cohort-api:
       container_name: cohort-api
-      image: 3.9.189.182:5000/cohort-api
+      image: 3.11.139.49:5000/cohort-api
       build: 
         context: ./qa-portal-services
         args: 
@@ -113,6 +114,7 @@ services:
 
     cv-api:
       container_name: cv-api
+      image: 3.11.139.49:5000/cv-api
       build: 
         context: ./qa-portal-services
         args: 
@@ -130,6 +132,7 @@ services:
       
     feedback-api:
       container_name: feedback-api
+      image: 3.11.139.49:5000/feedback-api
       build: 
         context: ./qa-portal-services
         args: 
@@ -146,6 +149,7 @@ services:
       
     form-api:
       container_name: form-api
+      image: 3.11.139.49:5000/form-api
       build: 
         context: ./qa-portal-services
         args: 
@@ -162,6 +166,7 @@ services:
       
     self-reflection-api:
       container_name: self-reflection-api
+      image: 3.11.139.49:5000/self-reflection-api
       build: 
         context: ./qa-portal-services
         args: 
