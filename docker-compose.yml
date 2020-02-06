@@ -11,9 +11,7 @@ services:
       volumes:
         - db-data:/var/lib/postgresql/data/
       ports:
-        - "5433:5432"
-      deploy:
-        replicas: 1
+        - "5432:5432"
 
     keycloak:
       container_name: keycloak
@@ -35,10 +33,10 @@ services:
         - type: bind
           source: ./qa-portal-infra/keycloak/exported_realms
           target: /opt/jboss/exported_realms
+      ports:
+        - "8080:8080"
       depends_on:
         - postgres
-      deploy:
-        replicas: 1
 
     mongo:
       container_name: mongo
@@ -50,7 +48,7 @@ services:
       volumes:
       - ./mongo-data:/data/db
       ports:
-      - 27019:27017
+      - 27017:27017
       deploy:
         replicas: 1
 
@@ -72,8 +70,6 @@ services:
       - form-api
       ports:
         - 80:80
-      deploy:
-        replicas: 1
 
     ui:
       container_name: ui
@@ -81,8 +77,6 @@ services:
       build: 
         context: ./qa-portal-angular
         dockerfile: Dockerfile
-      deploy:
-        replicas: 1
 
     portal-app-api:
       image: 3.11.139.49:5000/portal-app-api 
@@ -100,8 +94,6 @@ services:
       - ENABLE_PUBLIC_ENDPOINTS=true
       depends_on:
       - postgres
-      deploy:
-        replicas: 1
 
     cohort-api:
       container_name: cohort-api
@@ -119,8 +111,6 @@ services:
       - ENABLE_PUBLIC_ENDPOINTS=true
       depends_on:
       - postgres
-      deploy:
-        replicas: 1
 
     cv-api:
       container_name: cv-api
@@ -139,8 +129,6 @@ services:
       depends_on:
       - postgres
       - mongo
-      deploy:
-        replicas: 1
       
     feedback-api:
       container_name: feedback-api
@@ -158,8 +146,6 @@ services:
       - ENABLE_PUBLIC_ENDPOINTS=true
       depends_on:
       - postgres
-      deploy:
-        replicas: 1
       
     form-api:
       container_name: form-api
@@ -177,8 +163,6 @@ services:
       - ENABLE_PUBLIC_ENDPOINTS=true
       depends_on:
       - postgres
-      deploy:
-        replicas: 1
       
     self-reflection-api:
       container_name: self-reflection-api
@@ -196,8 +180,6 @@ services:
       - ENABLE_PUBLIC_ENDPOINTS=true
       depends_on:
       - postgres
-      deploy:
-        replicas: 1
 
 volumes:
   db-data:
